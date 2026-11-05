@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g3d.Environment
 import com.badlogic.gdx.graphics.g3d.ModelBatch
 import com.badlogic.gdx.graphics.g3d.ModelInstance
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute
+import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight
 import com.badlogic.gdx.graphics.g3d.environment.PointLight
 import com.badlogic.gdx.math.Vector3
@@ -87,6 +88,15 @@ class WorldManager(val worldGenerator: WorldGenerator) {
         assets.skyDomeMaterial.set(ColorAttribute.createDiffuse(dayNightCycle.skyZenithColor))
         assets.skyDomeMaterial.set(ColorAttribute.createEmissive(dayNightCycle.skyZenithColor))
 
+        // Fade stars smoothly through dusk and dawn.
+        val hour = dayNightCycle.inGameHoursFloat
+        val nightVisibility = when {
+            hour >= 21f || hour < 4.5f -> 1f
+            hour >= 18f -> smoothStep(18f, 21f, hour)
+            else -> 1f - smoothStep(4.5f, 7.5f, hour)
+        }
+        (assets.skyStarsMaterial.get(BlendingAttribute.Type) as? BlendingAttribute)?.opacity = nightVisibility
+
         // Pulse central monument mana light gently
         val intensity = 26f + sin(worldTime * 2.2f) * 4.5f
         monumentCenterLight.set(0.22f, 0.88f, 0.98f, 0f, 4.2f, 0f, intensity)
@@ -117,9 +127,16 @@ class WorldManager(val worldGenerator: WorldGenerator) {
         }
     }
 
+    private fun smoothStep(edge0: Float, edge1: Float, value: Float): Float {
+        val t = ((value - edge0) / (edge1 - edge0)).coerceIn(0f, 1f)
+        return t * t * (3f - 2f * t)
+    }
+
     fun render(modelBatch: ModelBatch, camera: PerspectiveCamera) {
         // Keep sky dome centered around player horizontally, oriented by celestial trajectory
-        val celestialAngleDeg = ((dayNightCycle.inGameHoursFloat - 6f) / 24f) * 360f
+        // Keep the sun highest at 12:00 PM, on the horizon at 06:00 AM / 06:00 PM,
+        // and below the horizon at midnight. The moon is opposite the sun in the dome.
+        val celestialAngleDeg = (dayNightCycle.inGameHoursFloat - 12f) * 15f
         worldData.skyDomeInstance.transform
             .setToTranslation(camera.position.x, 0f, camera.position.z)
             .rotate(0f, 0f, 1f, celestialAngleDeg)
