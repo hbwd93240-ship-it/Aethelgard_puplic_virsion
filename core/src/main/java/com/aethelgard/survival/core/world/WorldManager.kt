@@ -134,7 +134,9 @@ class WorldManager(val worldGenerator: WorldGenerator) {
 
     fun render(modelBatch: ModelBatch, camera: PerspectiveCamera) {
         // Keep sky dome centered around player horizontally, oriented by celestial trajectory
-        val celestialAngleDeg = ((dayNightCycle.inGameHoursFloat - 6f) / 24f) * 360f
+        // Keep the sun highest at 12:00 PM, on the horizon at 06:00 AM / 06:00 PM,
+        // and below the horizon at midnight. The moon is opposite the sun in the dome.
+        val celestialAngleDeg = (dayNightCycle.inGameHoursFloat - 12f) * 15f
         worldData.skyDomeInstance.transform
             .setToTranslation(camera.position.x, 0f, camera.position.z)
             .rotate(0f, 0f, 1f, celestialAngleDeg)
