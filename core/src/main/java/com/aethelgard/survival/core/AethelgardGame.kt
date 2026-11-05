@@ -145,7 +145,7 @@ class AethelgardGame(
             // 1. Initialize 3D Perspective Camera
             camera = PerspectiveCamera(64f, width.toFloat(), height.toFloat()).apply {
                 near = 0.18f
-                far = 260f
+                far = 500f
             }
 
             // 2. Initialize ModelBatch with shader support for directional + point lights and driver fallback
@@ -215,10 +215,7 @@ class AethelgardGame(
         // 4b. Initialize Ground Pickup Manager & Spawn Green Slimes across grassy woodland clearings
         groundPickupManager = GroundPickupManager(modelFactory, worldManager)
         val slimeSpawns = listOf(
-            Vector3(18.0f, 0f, 12.0f),
-            Vector3(-18.5f, 0f, 10.0f),
-            Vector3(-15.0f, 0f, -14.0f),
-            Vector3(16.5f, 0f, -13.5f)
+            Vector3(18.0f, 0f, 12.0f)
         )
         val slimeModel = modelFactory.createGreenSlimeModel()
         for ((idx, spawn) in slimeSpawns.withIndex()) {
@@ -246,9 +243,7 @@ class AethelgardGame(
 
         // 4c. Spawn Blue Flower Monsters across woodland edges (drop MP Potions when defeated)
         val blueFlowerSpawns = listOf(
-            Vector3(14.5f, 0f, 18.0f),
-            Vector3(-16.0f, 0f, 17.5f),
-            Vector3(12.0f, 0f, -18.0f)
+            Vector3(14.5f, 0f, 18.0f)
         )
         val blueFlowerModel = modelFactory.createBlueFlowerMonsterModel()
         for ((idx, spawn) in blueFlowerSpawns.withIndex()) {
@@ -275,9 +270,7 @@ class AethelgardGame(
 
         // 4d. Spawn Red Flower Monsters across grassy forest clearings (drop Health Potions when defeated)
         val redFlowerSpawns = listOf(
-            Vector3(-13.5f, 0f, 22.5f),
-            Vector3(15.5f, 0f, 23.0f),
-            Vector3(-11.5f, 0f, -19.5f)
+            Vector3(-13.5f, 0f, 22.5f)
         )
         val redFlowerModel = modelFactory.createRedFlowerMonsterModel()
         for ((idx, spawn) in redFlowerSpawns.withIndex()) {
