@@ -1,0 +1,6 @@
+{
+  "name": "AethelgardSurvival",
+  "description": "3D Anime Fantasy Survival Action RPG built with Kotlin and LibGDX OpenGL ES featuring procedural 3D characters, bioluminescent forest clearing, articulated animations, and multi-touch controls.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
