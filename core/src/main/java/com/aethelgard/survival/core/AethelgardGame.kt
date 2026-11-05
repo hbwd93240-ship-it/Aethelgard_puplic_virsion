@@ -855,7 +855,7 @@ class AethelgardGame(
         if (::survivalSaveManager.isInitialized && ::inventory.isInitialized) {
             try {
                 val bm = if (::buildingManager.isInitialized) buildingManager else null
-                survivalSaveManager.saveAll(inventory, chestManager, survivalAttributes, harvestableResourceManager, bm)
+                survivalSaveManager.saveAll(inventory, chestManager, survivalAttributes, harvestableResourceManager, bm, if (::worldManager.isInitialized) worldManager.dayNightCycle else null)
             } catch (_: Throwable) {
             }
         }
@@ -865,7 +865,7 @@ class AethelgardGame(
         if (::survivalSaveManager.isInitialized && ::inventory.isInitialized) {
             try {
                 val bm = if (::buildingManager.isInitialized) buildingManager else null
-                survivalSaveManager.saveAll(inventory, chestManager, survivalAttributes, harvestableResourceManager, bm)
+                survivalSaveManager.saveAll(inventory, chestManager, survivalAttributes, harvestableResourceManager, bm, if (::worldManager.isInitialized) worldManager.dayNightCycle else null)
             } catch (_: Throwable) {
             }
         }
